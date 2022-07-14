@@ -42,20 +42,21 @@ class FunctionLauncher:
         self._socket.sendall(json_bytes)
 
     def receive(self):
-        json_bytes_length = self.receive_all(4)
+
+        def receive_all(message_length):
+            data = bytearray()
+            while len(data) < message_length:
+                packet = self._socket.recv(message_length - len(data))
+                if not packet:
+                    return None
+                data.extend(packet)
+            return data
+
+        json_bytes_length = receive_all(4)
         if not json_bytes_length:
             return None
         json_dumps_length = struct.unpack('>I', json_bytes_length)[0]
-        return self.receive_all(json_dumps_length)
-
-    def receive_all(self, message_length):
-        data = bytearray()
-        while len(data) < message_length:
-            packet = self._socket.recv(message_length - len(data))
-            if not packet:
-                return None
-            data.extend(packet)
-        return data
+        return receive_all(json_dumps_length)
 
     #####################################################################
 
