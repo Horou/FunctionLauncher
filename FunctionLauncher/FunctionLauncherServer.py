@@ -65,7 +65,7 @@ class FunctionLauncherServer():
             try:
                 while True:
                     self.handle(connection)
-            except:
+            except socket.timeout:
                 pass
 
     def handle(self, connection):

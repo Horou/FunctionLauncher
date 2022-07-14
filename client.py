@@ -35,15 +35,6 @@ class Personne:
             }
         ]
         self.capacity_tester1 = "#"*66000
-        self.capacity_tester2 = "#"*66000
-        self.capacity_tester3 = "#"*66000
-        self.capacity_tester4 = "#"*66000
-        self.capacity_tester5 = "#"*66000
-        self.capacity_tester6 = "#"*66000
-        self.capacity_tester7 = "#"*66000
-        self.capacity_tester8 = "#"*66000
-        self.capacity_tester9 = "#"*66000
-        self.capacity_tester10 = "#"*66000
 
     def testeur(self, something, cool, hell_yeah="brodha"):
         self.did_you_win = True
