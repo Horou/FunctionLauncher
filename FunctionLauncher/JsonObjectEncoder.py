@@ -1,3 +1,4 @@
+# encoding: utf-8
 import json
 from InstanceConstructorMixin import CREATE_CLASS
 
