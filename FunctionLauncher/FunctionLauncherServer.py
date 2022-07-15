@@ -61,7 +61,7 @@ class FunctionLauncherServer:
         while True:
             connection, socket_address = self._socket.accept()
             connection.settimeout(2.0)
-            print("Connection established with: %s" % connection)
+            print("Connection established with: %s -> %s" % (connection.getsockname(), connection.getpeername()))
             try:
                 while True:
                     self.handle(connection)
@@ -72,7 +72,7 @@ class FunctionLauncherServer:
         json_bytes = self.receive(connection)
         if not json_bytes:
             raise socket.timeout
-        print("New Message received:\n" + json.dumps(json.loads(json_bytes), indent=4))
+        print("New Message received:\n" + json.dumps(json.loads(json_bytes.decode("utf-8")), indent=4))
         instance, function_name, args, kwargs = self.extract_data(json_bytes)
         result = self.get_function_result(instance, function_name, args, kwargs)
         self.send(connection, result)
