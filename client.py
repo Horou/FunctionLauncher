@@ -40,6 +40,7 @@ class Personne:
             }
         ]
         self.capacity_tester1 = "#"*66000
+        self.useless = Useless()
 
     def testeur(self, something, cool, hell_yeah="brodha"):
         self.did_you_win = True

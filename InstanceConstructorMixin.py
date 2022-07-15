@@ -8,23 +8,23 @@ class CreateInstanceMixin:
     @staticmethod
     def create_address(info):
         from client import Address
-        obj = Address()
-        CreateInstanceMixin.update_instance(obj, info)
-        return obj
+        instance = Address()
+        CreateInstanceMixin.update_instance(instance, info)
+        return instance
 
     @staticmethod
     def create_personne(info):
         from client import Personne
-        obj = Personne(info["name"], info["surname"])
-        CreateInstanceMixin.update_instance(obj, info)
-        return obj
+        instance = Personne(info["name"], info["surname"])
+        CreateInstanceMixin.update_instance(instance, info)
+        return instance
 
     @staticmethod
     def create_personne_mirror(info):
         from client import PersonneMirror
-        obj = PersonneMirror(info["name"], info["surname"])
-        CreateInstanceMixin.update_instance(obj, info)
-        return obj
+        instance = PersonneMirror(info["name"], info["surname"])
+        CreateInstanceMixin.update_instance(instance, info)
+        return instance
 
 
 CREATE_CLASS = {
