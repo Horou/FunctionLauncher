@@ -6,6 +6,10 @@ from FunctionLauncher.JsonObjectEncoder import JsonObjectEncoder
 
 ####################################################################
 
+class Useless:
+    ok = 1
+
+
 class Address:
     def __init__(self):
         self.name = "name"
@@ -15,6 +19,7 @@ class Address:
         self.coordinate32 = numpy.float32(123.456789)
         self.nothing = None
         self.is_bool = True
+        self.useless = Useless()
 
 
 class Personne:
@@ -54,6 +59,8 @@ class PersonneMirror(Personne):
 if __name__ == "__main__":
     instance = PersonneMirror("nicolas", "nemouthe")
     result = instance.testeur("something", "cool", hell_yeah="brodha2")
+    print(str(instance.__dict__))
+    print(str(instance.address.__dict__))
     print(">>>>>instance<<<<<: \n" + JsonObjectEncoder.dumps(instance, indent="    "))
     print(">>>>>Function return<<<<<: " + str(result))
     result = instance.testeur("something", "cool", hell_yeah="brodha2")

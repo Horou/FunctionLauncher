@@ -7,7 +7,7 @@ from FunctionLauncher.JsonObjectEncoder import JsonObjectEncoder
 
 class FunctionLauncher:
 
-    def __init__(self, host: str, port: int):
+    def __init__(self, host, port):
         self.instance = None
         self.instance_class = None
         self.instance_function = None
@@ -21,6 +21,7 @@ class FunctionLauncher:
 
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((self._host, self._port))
+        self._socket.settimeout(2)
 
     def __call__(self, function):
         self.instance_function = function
@@ -77,5 +78,10 @@ class FunctionLauncher:
         returned_dict = JsonObjectEncoder.loads(data.decode("utf-8"))
         self.returned_instance = returned_dict["instance"]
         self.function_return = returned_dict["return"]
-        self.instance.__dict__ = self.returned_instance.__dict__
+        self.update_instance()
         return self.function_return
+
+    def update_instance(self):
+        for key, value in self.returned_instance.__dict__.items():
+            setattr(self.instance, key, value)
+

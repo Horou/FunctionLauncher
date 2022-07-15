@@ -1,10 +1,11 @@
+import json
 import socket
 import struct
 from FunctionLauncher.JsonObjectEncoder import JsonObjectEncoder
 
 
-class FunctionLauncherServer():
-    def __init__(self, host: str, port: int):
+class FunctionLauncherServer:
+    def __init__(self, host, port):
 
         self._host = host
         self._port = port
@@ -24,7 +25,7 @@ class FunctionLauncherServer():
     @staticmethod
     def receive(connection):
 
-        def receive_all(connection, data_length):
+        def receive_all(data_length):
             data = bytearray()
             while len(data) < data_length:
                 packet = connection.recv(data_length - len(data))
@@ -33,11 +34,11 @@ class FunctionLauncherServer():
                 data.extend(packet)
             return data
 
-        bytes_length = receive_all(connection, 4)
+        bytes_length = receive_all(4)
         if not bytes_length:
             return None
-        data_length = struct.unpack('>I', bytes_length)[0]
-        return receive_all(connection, data_length)
+        length = struct.unpack('>I', bytes_length)[0]
+        return receive_all(length)
 
     #####################################################################
 
@@ -58,21 +59,20 @@ class FunctionLauncherServer():
 
     def run(self):
         while True:
-            print("Listening on port: "+str(self._port))
             connection, socket_address = self._socket.accept()
             connection.settimeout(2.0)
-            print("Connected to %s" % str(socket_address))
+            print("Connection established with: %s" % connection)
             try:
                 while True:
                     self.handle(connection)
             except socket.timeout:
-                pass
+                print("Waiting for new connection...")
 
     def handle(self, connection):
-        print("Listening on port: " + str(self._port))
         json_bytes = self.receive(connection)
+        if not json_bytes:
+            raise socket.timeout
+        print("New Message received:\n" + json.dumps(json.loads(json_bytes), indent=4))
         instance, function_name, args, kwargs = self.extract_data(json_bytes)
-        print("Data Received:\n%s" % str((instance, function_name, args, kwargs)))
         result = self.get_function_result(instance, function_name, args, kwargs)
-        print("instance: %s\nreturn: %s" % (result["instance"], result["return"]))
         self.send(connection, result)
